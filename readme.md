@@ -1,3 +1,5 @@
+**简体中文**  | [English](readme_en.md)
+
 <div align="center">
     <h1>LightNovelReaderPlugin</h1>
     <a><img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white&style=for-the-badge"/></a>
@@ -34,8 +36,7 @@
 
 你需要确保插件内有且仅有一个实现了```LightNovelReaderPlugin```接口, 并且为其添加```@Plugin```注解
 
-当软件无法找到入口点时, 将不会加载插件(包括数据源), 当存在多个时, 软件仅会加载一个入口点(
-加载顺序属于未定义行为)
+当软件无法找到入口点时, 将不会加载插件(包括数据源), 当存在多个时, 软件仅会加载一个入口点(加载顺序属于未定义行为)
 
 ```kotlin
 @Plugin(
@@ -53,6 +54,72 @@ class ExamplePlugin : LightNovelReaderPlugin {
 }
 ```
 
+你可以通过添加构造器参数的方式获取一些软件内部api的实例, 软件在初始化插件时会自动注入这些api的实现
+```kotlin
+@Plugin(
+    version = 0,
+    name = "example",
+    versionName = "0.0.1",
+    author = "none",
+    description = "a example plugin",
+    updateUrl = "http://example.org"
+)
+class ExamplePlugin(
+  val userDataRepositoryApi: UserDataRepositoryApi,
+  val userDataDaoApi:   UserDataDaoApi,
+  val userDataRepositoryApi: UserDataRepositoryApi,
+  val webBookDataSourceManagerApi: WebBookDataSourceManagerApi,
+  val textProcessingRepositoryApi: TextProcessingRepositoryApi,
+  val localBookDataSourceApi: LocalBookDataSourceApi,
+  val bookRepositoryApi: BookRepositoryApi,
+  val bookshelfRepositoryApi: BookshelfRepositoryApi,
+) : LightNovelReaderPlugin {
+    override fun onLoad() {
+        //write something that will be execute when the plugin is loaded
+    }
+}
+```
+
+你可以通过重写```PageContent```可重组函数来在插件页面中显示自己的内容
+```kotlin
+@Plugin(
+    //......
+)
+class ExamplePlugin(
+    //......
+) : LightNovelReaderPlugin {
+  //......
+  @Composable
+  override fun PageContent(paddingValues: PaddingValues) {
+    val content = LocalContext.current
+    Column(
+      modifier = Modifier
+        .padding(paddingValues)
+        .clip(RoundedCornerShape(16.dp)),
+      verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+      val checked by userDataRepositoryApi.booleanUserData("TestBooleanUserData").getFlowWithDefault(true).collectAsState(true)
+      SettingsSwitchEntry(
+        modifier = Modifier.background(colorScheme.surfaceContainer),
+        title = "测试选项",
+        description = "Ciallo～(∠・ω< )⌒★",
+        checked = checked,
+        booleanUserData = userDataRepositoryApi.booleanUserData("TestBooleanUserData")
+      )
+      SettingsClickableEntry(
+        modifier = Modifier.background(colorScheme.surfaceContainer),
+        title = "测试点击",
+        description = "0721",
+        onClick = {
+          Toast.makeText(content, "带面纸了吗", Toast.LENGTH_LONG).show()
+        }
+      )
+    }
+  }
+}
+```
+
+
 #### 编写自己的数据源
 
 编写数据源时如果有搞不懂的地方可以去看软件仓库的[默认数据源实现](https://github.com/dmzz-yyhyy/LightNovelReader/tree/refactoring/app/src/main/kotlin/indi/dmzz_yyhyy/lightnovelreader/defaultplugin)
@@ -69,7 +136,7 @@ class ExamplePlugin : LightNovelReaderPlugin {
     provider = "example.com"
 )
 object ExampleWebDataSource : WebBookDataSource {
-    ......
+    //......
 }
 ```
 

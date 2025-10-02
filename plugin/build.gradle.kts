@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -18,11 +19,17 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
         }
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -44,6 +51,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.foundation.layout)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material3)
 
     //LNR Api
     implementation(libs.lightnovelreader.api)

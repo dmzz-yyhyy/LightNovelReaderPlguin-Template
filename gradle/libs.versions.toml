@@ -1,14 +1,16 @@
 [versions]
 desugar = "2.1.5"
 agp = "8.12.3"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinxCoroutinesCore = "1.10.2"
 lightnovelreader = "refactoring-SNAPSHOT"
-runtime = "1.9.0"
-
+runtime = "1.9.2"
 jsoup = "1.21.2"
-navigationRuntimeKtx = "2.9.3"
-jetbrainsKotlinJvm = "2.2.10"
+navigationRuntimeKtx = "2.9.5"
+jetbrainsKotlinJvm = "2.2.20"
+foundationLayout = "1.9.2"
+composeBom = "2025.09.01"
+composeMaterial3 = "1.4.0"
 
 [libraries]
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
@@ -18,11 +20,15 @@ lightnovelreader-api = { module = "com.github.dmzz-yyhyy.LightNovelReader:api", 
 
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-dynamic-feature = { id = "com.android.dynamic-feature", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose_compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 

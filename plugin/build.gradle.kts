@@ -1,3 +1,4 @@
+import com.android.tools.r8.internal.aC
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -35,6 +36,15 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val originalFileName = outputImpl.outputFileName
+            val newFileName = originalFileName.replace(".apk", ".apk.lnrp")
+            outputImpl.outputFileName = newFileName
+        }
     }
 }
 
